@@ -1,7 +1,7 @@
 <H1 align="center">Playwire Unity SDK</H1>
 
 <p align="center">
-    <a><img alt="Version" src="https://img.shields.io/badge/version-3.1.0-blue"></a>
+    <a><img alt="Version" src="https://img.shields.io/badge/version-3.2.0-blue"></a>
     <a href="https://unity.com/"><img alt="Unity 2019.4.30f1 (LTS)" src="https://img.shields.io/badge/Unity 2019.4.30f1 (LTS)-orange.svg?style=flat"></a>
 </p>
 
@@ -17,30 +17,37 @@
 
 Follow these steps to import the `Playwire Unity SDK` to your project:
 
-1. Download the latest the `Playwire Unity SDK` package [here](https://github.com/intergi/playwire-unity-package).
-2. Open the Unity Editor, go to `Assets > Import Package > Custom Package`. Keep all the files selected in the Importing Package window, then click Import.
+1. Download the latest `Playwire Unity SDK` package [here](https://github.com/intergi/playwire-unity-package).
+2. Open the Unity Editor, go to `Assets > Import Package > Custom Package`.
+3. In the Import Unity Package window, keep all the files selected, then click `Import`.
 <img src="readme-resources/package_import.png" alt="package-import" width="600"/>
 
-3. Once importing has been finished, the set of dependencies should be resolved. Follow the [Dependencies installation](#dependencies-installation) section to resolve all required dependencies.
-4. Find configuration files that your Playwire account rep provided to you, they are usually sent via email. Verify that you have files for both iOS and Android platforms. You must copy and paste them to `Assets/Playwire/Plugins/Resources/iOS` and `Assets/Playwire/Plugins/Resources/Android` respectively. Follow the [Configuration](#configuration) section to check how to work with configuration files, escpecially if you use a custom configuration filename.
+4. Once importing has been finished, the set of dependencies should be resolved. Follow the [Dependencies installation](#dependencies-installation) section to resolve all required dependencies.
+5. Search for the configuration files emailed by your Playwire Account Manager. You should have files for both iOS and Android.
+6. Copy and paste the file to `Assets/Playwire/Plugins/Resources/iOS` (for the iOS file) and `Assets/Playwire/Plugins/Resources/Android` (for the Android file).
+7. See the [Configuration](#configuration) section for the specific steps on how to work with configuration files, especially if you use a custom configuration filename.
 <img src="readme-resources/resources.png" alt="resources"/>
 
-5. Build and run your Unity project.
+8. Build and run your Unity project.
 
 # Dependencies installation
 
 The `Playwire Unity SDK` is configured to use the [External Dependency Manager](https://github.com/googlesamples/unity-jar-resolver) (formerly Play Services Resolver/Jar Resolver). This is a complex tool for managing and automating dependencies for iOS (CocoaPods) and Android (Gradle).
 
-See list of options to resolve and adjust settings in `Assets > External Dependency Manager`. If it is not available for you, go to `File > Build settings > Select iOS or Android > Switch Platform`.
+See the list of options to resolve and adjust settings in `Assets > External Dependency Manager`. If it is not available for you, go to `File > Build settings > Select iOS or Android > Switch Platform`.
 
-> **Note**: If you are integrating an updated version of `Playwire Unity SDK` on top of existing one, you may face an issue while building iOS project's workspace. The thing is Unity fails to download newest podspecs from remote repository to your local repository (`Users/<USER_NAME>/.cocoapods/repo`) while building iOS project. Thus you need to do it by yourselves just by running command to actualize local `Playwire iOS` pods. By default pod repo's name is `intergi` and to update latest podspecs, please run `pod repo update intergi` in Terminal.
+> **Note**: If you are integrating an updated version of the `Playwire Unity SDK` on top of existing one, you may face an issue while building iOS project's workspace. The thing is Unity fails to download newest podspecs from remote repository to your local repository (`Users/<USER_NAME>/.cocoapods/repo`) while building iOS project. Thus you need to do it by yourselves just by running command to actualize local `Playwire iOS` pods. By default pod repo's name is `intergi` and to update latest podspecs, please run the next command in Terminal.
 
+```bash
+$ pod repo update intergi
+```
 ## iOS
 
 The External Dependency Manager uses [CocoaPods](https://guides.cocoapods.org/using/getting-started.html#getting-started) to install the iOS dependencies.
 
-All dependencies are resolved automatically during the build process. The build scripts run specified pod commands to install dependencies and configure an iOS project accordingly to the settings. You can check and adjust resolver settings in `Assets > External Dependency Manager > iOS Resolver > Settings`.
+All dependencies are resolved automatically during the build process. The build scripts run specified pod commands to install dependencies and configure an iOS project according to the settings. You can check and adjust resolver settings in `Assets > External Dependency Manager > iOS Resolver > Settings`.
 
+> **Note**: The `Playwire Unity SDK` requires CocoaPods version >= `1.10.2` to install the iOS dependencies.
 ## Android
 
 The External Dependency Manager uses [Gradle](https://docs.gradle.org/current/userguide/getting_started.html) to install the Android dependencies.
@@ -86,34 +93,42 @@ allprojects {
                 password = keystoreProperties['maven_repo_read_password']
             }
         }
+        maven {
+            url 'https://android-sdk.is.com/'
+        }
+        maven {
+            url "https://s3.amazonaws.com/smaato-sdk-releases/"
+        }
         // ...
     }
     // ...
 }
 ```
-3. Go to `Edit > Project Settings > Player > Settings for Android > Publishing Settings` and check `Custom Main Gradle Template`. Also, please verify that `Patch mainTemplate.gradle` option is enabled in `Assets > External Dependence Manager > Android Resolver > Settings`. Once you did previous steps, please perform automatic dependency resolving by clicking `Assets > External Dependence Manager > Android Resolver > Force Resolve`.
-
+3. Go to `Edit > Project Settings > Player > Settings for Android > Publishing Settings` and check `Custom Main Gradle Template` checkbox.
+4. Go to `Assets > External Dependency Manager > Android Resolver > Settings`, and verify that `Patch mainTemplate.gradle` is enabled.
 <img src="readme-resources/patch_main_gradle.png" alt="patch_main_gradle" width="700"/>
+
+5. When done, go to `Assets > External Dependency Manager > Android Resolver`, and click `Force Resolve` to start the automatic dependency resolving.
 
 # Usage
 
 ## Initialization
 
-To start working with the `Playwire Unity SDK`, you must first initialize it. This step is required, otherwise SDK will not make any ad requests and ads will not be available for your users.
-In most cases, it makes sense to do this in your app’s [`Start()`](https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html) method.
+Initialize the Playwire Unity SDK in your app’s [`Start()`](https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html) method.
 
 ```csharp
 PlaywireSDK.InitializeSDK();
 ```
 
-Once the `Playwire Unity SDK` has been initialized, you will receive the `PlaywireSDKCallback.OnSDKInitializedEvent`.
+When done, you will receive the `PlaywireSDKCallback.OnSDKInitializedEvent`.
 
-> **Note**: In case you call any method without initialization, SDK will notify you about this in the IDE logs window.
+> **Note**: If you call any method without initialization, the SDK notifies you about it in the IDE logs window.
 
 ## Configuration
 
-The `Playwire Unity SDK` retrieves data for configuration from the JSON file, that should be given to you by Playwire (If you do not have such config file, please contact your Playwire account rep with any questions or technical issues).
-By default the `Playwire Unity SDK` is looking for the **`PWConfigFile.json`** file, but you can provide a custom filename and set it as config file for the `Playwire Unity SDK`.
+The `Playwire Unity SDK` retrieves configuration data from the JSON file provided by Playwire. If you do not have this file, contact your Playwire Account Manager.
+By default, the `Playwire Unity SDK` looks for **`PWConfigFile.json`**.
+You can also provide a custom filename and set it as the config file for the SDK.
 
 ```csharp
 string configName = "CUSTOM_CONFIG_FILE_NAME";
@@ -122,17 +137,17 @@ PlaywireSDK.SetConfigName(configName);
 PlaywireSDK.InitializeSDK();
 ```
 
-If you use a custom filename, you have to provide some modifications for `BuildPostProcessor`. There is a service that simplifies the `Playwire Unity SDK` integration, because it takes over iOS and Android projects adjustments, such as, setup required identifiers, settings and permissions, etc. We do not recommend to modify it unless you have to, such as in case above.
+If you use a custom filename, you have to provide some modifications for `BuildPostProcessor`. There is a service that simplifies the `Playwire Unity SDK` integration, because it takes over iOS and Android projects adjustments, such as, setup required identifiers, settings and permissions, etc. We do not recommend modifying it unless you have to, such as in case above.
 Open `Assets/Playwire/Editor/BuildPostProcessor.cs` and replace `iOSConfigurationFile` and `androidConfigurationFile` values with your custom filename. This step is mandatory to avoid runtime issues.
 
-> **Note**: We recommend you to set a custom config filename before initialization to avoid any issues related to SDK configuration.
-## Ad Units
+> **Note**: To avoid any SDK configuration issues, set the custom config filename before initialization.
+## Request for ads
 
-### Banner
+### Request banner ads
 
-To display a banner you should make a request to fetch an ad content first. To load a banner ad you have to provide the ad unit and position where a banner view will be placed.
+To display a banner ad on your app, you must first request for the ad. Provide the ad unit and where it should be positioned.
 
-> **Note**: If your Unity project is implemented on both iOS and Android platforms, a banner will be placed at the same position on the screen, but you must use different ad units for each platform. See `UNITY_IOS` and `UNITY_ANDROID` platform #define directives as a possible solution.
+> **Note**: If your Unity project is implemented on both iOS and Android platforms, the banner is placed in the same position, but you must use different ad units for each platform. See `UNITY_IOS` and `UNITY_ANDROID` [platform #define directives](https://docs.unity3d.com/Manual/PlatformDependentCompilation.html) as a possible solution.
 
 ```csharp
 string BannerAdUnitId = "Banner";
@@ -143,17 +158,17 @@ See table with available banner positions below.
 
 | PlaywireSDKBase.AdPosition     | Description                                                 |
 | ------------------------------ | ----------------------------------------------------------- |
-| TopLeft                        | A banner will be placed at the top left of the screen.      |
-| TopCenter                      | A banner will be placed at the top center of the screen.    |
-| TopRight                       | A banner will be placed at the top right of the screen.     |
-| CenterLeft                     | A banner will be placed at the center left of the screen.   |
-| Center                         | A banner will be placed at the center of the screen.        |
-| CenterRight                    | A banner will be placed at the center right of the screen.  |
-| BottomLeft                     | A banner will be placed at the bottom left of the screen.   |
-| BottomCenter                   | A banner will be placed at the bottom center of the screen. |
-| BottomRight                    | A banner will be placed at the bottom right of the screen.  |
+| TopLeft                        | The banner is placed at the top left of the screen.      |
+| TopCenter                      | The banner is placed at the top center of the screen.    |
+| TopRight                       | The banner is placed at the top right of the screen.     |
+| CenterLeft                     | The banner is placed at the center left of the screen.   |
+| Center                         | The banner is placed at the center of the screen.        |
+| CenterRight                    | The banner is placed at the center right of the screen.  |
+| BottomLeft                     | The banner is placed at the bottom left of the screen.   |
+| BottomCenter                   | The banner is placed at the bottom center of the screen. |
+| BottomRight                    | The banner is placed at the bottom right of the screen.  |
 
-Once the banner has been loaded successfully, you will receive the `PlaywireSDKCallback.Banner.OnLoadedEvent`, otherwise - `PlaywireSDKCallback.Banner.OnFailedToLoadEvent`.
+If the banner is loaded successfully, you would receive `PlaywireSDKCallback.Banner.OnLoadedEvent`. If not, you would receive `PlaywireSDKCallback.Banner.OnFailedToLoadEvent`.
 
 In case the banner is ready to be displayed, you can show it on the screen at the position you passed during loading or hide it.
 
@@ -165,7 +180,7 @@ PlaywireSDK.ShowBanner(BannerAdUnitId);
 PlaywireSDK.HideBanner(BannerAdUnitId);
 ```
 
-The `PlaywireSDKCallback.Banner` provides the banner-related callbacks to inform you about a banner ad lifecycle. You can subscribe to be notified about events and handle it.
+`PlaywireSDKCallback.Banner` provides the banner-related callbacks to inform you of the banner ad lifecycle. You can subscribe to be notified about events and how to handle them.
 
 ```csharp
 void OnEnable () 
@@ -189,7 +204,7 @@ void OnBannerFailedToLoadEvent(PlaywireSDKEventArgs args)
 }
 ```
 
-The banner-related actions are listed below.
+See the list below for banner-related callbacks.
 
 ```csharp
 ... PlaywireSDKCallback {
@@ -215,19 +230,20 @@ The banner-related actions are listed below.
 }
 ```
 
-### Interstitial
+### Request for interstitial ads
 
-To display an interstitial you should make a request to fetch an ad content first. To load an interstitial ad you have to provide the ad unit.
-We recommend requesting an interstitial ad a short while before you plan to present it for your users because the loading process can take time.
+To display an interstitial ad on your app, you must first request it and provide the ad unit.
+
+When requesting  an interstitial ad, we recommend that you do so in advance before planning to present it to your user as the loading process may take time.
 
 ```csharp
 string InterstitialAdUnitId = "Interstitial";
 PlaywireSDK.LoadInterstitial(InterstitialAdUnitId);
 ```
 
-> **Note**: The interstitial is a one-time-use object. This means that once an interstitial ad is shown, it must be loaded again. You can check if the interstitial is ready to be presented via `PlaywireSDK.IsInterstitialReady(string adUnitId)` method.
+> **Note**: An interstitial ad is a one-time-use object, which means it must be loaded again after its shown. Use the `PlaywireSDK.IsInterstitialReady(string adUnitId)` method to check if the ad is ready to be presented.
 
-Once the interstitial has been loaded successfully, you will receive the `PlaywireSDKCallback.Interstitial.OnLoadedEvent`, otherwise - `PlaywireSDKCallback.Interstitial.OnFailedToLoadEvent`.
+If the interstitial is loaded successfully, you would receive `PlaywireSDKCallback.Interstitial.OnLoadedEvent`. If not, you would receive `PlaywireSDKCallback.Interstitial.OnFailedToLoadEvent`.
 In case the interstitial is ready to be displayed, you can present full screen content.
 
 ```csharp
@@ -235,9 +251,9 @@ string InterstitialAdUnitId = "Interstitial";
 PlaywireSDK.ShowInterstitial(InterstitialAdUnitId);
 ```
 
-> **Note**: The interstitial ad content will be presented only if it was loaded and was not shown before, otherwise `PlaywireSDKCallback.Interstitial.OnFailedToOpenEvent` will be invoked.
+> **Note**: The interstitial ad is presented only if it is loaded and not shown previously. Otherwise, `PlaywireSDKCallback.Interstitial.OnFailedToOpenEvent` is invoked.
 
-The `PlaywireSDKCallback.Interstitial` provides the interstitial-related callbacks to inform you about an interstitial ad lifecycle. You can subscribe to be notified about events and handle it.
+`PlaywireSDKCallback.Interstitial` provides interstitial-related callbacks to inform you about an interstitial ad lifecycle. You can subscribe to be notified about events and how to handle them.
 
 ```csharp
 void OnEnable () 
@@ -267,7 +283,7 @@ void OnInterstitialFailedToLoadEvent(PlaywireSDKEventArgs args)
 }
 ```
 
-The interstitial-related actions are listed below.
+See the list below for interstitial-related callbacks.
 
 ```csharp
 ... PlaywireSDKCallback {
@@ -296,19 +312,20 @@ The interstitial-related actions are listed below.
 }
 ```
 
-### Rewarded
+### Request for rewarded ads
 
-To display a rewarded you should make a request to fetch an ad content first. To load a rewarded ad you have to provide the ad unit.
-We recommend requesting a rewarded ad a short while before you plan to present it for your users because the loading process can take time.
+To display a rewarded ad on your app, you must first request it and provide the ad unit.
+
+When requesting a rewarded ad, we recommend that you do so in advance before planning to present it to your user as the loading process may take time.
 
 ```csharp
 string RewardedAdUnitId = "Rewarded";
 PlaywireSDK.LoadRewarded(RewardedAdUnitId);
 ```
 
-> **Note**: The rewarded is a one-time-use object. This means that once an rewarded ad is shown, it must be loaded again. You can check if the rewarded is ready to be presented via `PlaywireSDK.IsRewardedReady(string adUnitId)` method.
+> **Note**: A rewarded ad is a one-time-use object, which means it must be loaded again after its shown. Use the `PlaywireSDK.IsRewardedReady(string adUnitId)` method to check if the ad is ready to be presented.
 
-Once the rewarded has been loaded successfully, you will receive the `PlaywireSDKCallback.Rewarded.OnLoadedEvent`, otherwise - `PlaywireSDKCallback.Rewarded.OnFailedToLoadEvent`.
+If the rewarded ad is loaded successfully, you would receive `PlaywireSDKCallback.Rewarded.OnLoadedEvent`. If not, you would receive `PlaywireSDKCallback.Rewarded.OnFailedToLoadEvent`.
 In case the rewarded is ready to be displayed, you can present full screen content.
 
 ```csharp
@@ -316,9 +333,9 @@ string RewardedAdUnitId = "Rewarded";
 PlaywireSDK.ShowRewarded(RewardedAdUnitId);
 ```
 
-> **Note**: The rewarded ad content will be presented only if it was loaded and was not shown before, otherwise `PlaywireSDKCallback.Rewarded.OnFailedToOpenEvent` will be invoked.
+> **Note**: The rewarded ad is presented only if it is loaded and not shown previously. Otherwise `PlaywireSDKCallback.Rewarded.OnFailedToOpenEvent` is invoked.
 
-The `PlaywireSDKCallback.Rewarded` provides the rewarded-related callbacks to inform you about a rewarded ad lifecycle. You can subscribe to be notified about events and handle it.
+`PlaywireSDKCallback.Rewarded` provides rewarded-related callbacks to inform you about a rewarded ad lifecycle. You can subscribe to be notified about the events and how to handle them.
 
 ```csharp
 void OnEnable () 
@@ -347,7 +364,7 @@ void OnRewardedFailedToLoadEvent(PlaywireSDKEventArgs args)
 }
 ```
 
-The rewarded-related actions are listed below.
+See the list below for rewarded-related callbacks.
 
 ```csharp
 ... PlaywireSDKCallback {
