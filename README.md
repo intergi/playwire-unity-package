@@ -1,7 +1,7 @@
 <H1 align="center">Playwire Unity SDK</H1>
 
 <p align="center">
-    <a><img alt="Version" src="https://img.shields.io/badge/version-3.2.0-blue"></a>
+    <a><img alt="Version" src="https://img.shields.io/badge/version-3.3.0-blue"></a>
     <a href="https://unity.com/"><img alt="Unity 2019.4.30f1 (LTS)" src="https://img.shields.io/badge/Unity 2019.4.30f1 (LTS)-orange.svg?style=flat"></a>
 </p>
 
@@ -388,7 +388,7 @@ See the list below for rewarded-related callbacks.
         public static event Action<PlaywireSDKEventArgs> OnRecordedImpressionEvent
 
         /// It is fired when a reward has been earned.
-        public static event Action<PlaywireSDKEventArgs> OnEarnedEvent
+        public static event Action<PlaywireSDKAdRewardEventArgs> OnEarnedEvent
 
         /// It is fired when a click has been recorded for the rewarded ad.
         public static event Action<PlaywireSDKEventArgs> OnClickedEvent
