@@ -1,7 +1,7 @@
 <H1 align="center">Playwire Unity SDK</H1>
 
 <p align="center">
-    <a><img alt="Version" src="https://img.shields.io/badge/version-3.3.0-blue"></a>
+    <a><img alt="Version" src="https://img.shields.io/badge/version-3.3.0.1-blue"></a>
     <a href="https://unity.com/"><img alt="Unity 2019.4.30f1 (LTS)" src="https://img.shields.io/badge/Unity 2019.4.30f1 (LTS)-orange.svg?style=flat"></a>
 </p>
 
@@ -137,8 +137,8 @@ PlaywireSDK.SetConfigName(configName);
 PlaywireSDK.InitializeSDK();
 ```
 
-If you use a custom filename, you have to provide some modifications for `BuildPostProcessor`. There is a service that simplifies the `Playwire Unity SDK` integration, because it takes over iOS and Android projects adjustments, such as, setup required identifiers, settings and permissions, etc. We do not recommend modifying it unless you have to, such as in case above.
-Open `Assets/Playwire/Editor/BuildPostProcessor.cs` and replace `iOSConfigurationFile` and `androidConfigurationFile` values with your custom filename. This step is mandatory to avoid runtime issues.
+If you use a custom filename, you have to provide some modifications for `PostBuildProcessoriOS` or `PostBuildProcessorAndroid`. There are services that simplify the `Playwire Unity SDK` integration, because it takes over iOS and Android projects adjustments, such as, setup required identifiers, settings and permissions, etc. We do not recommend modifying it unless you have to, such as in case above.
+Open `Assets/Playwire/Editor/PostBuildProcessoriOS.cs` and replace `iOSConfigurationFile` value, then open `Assets/Playwire/Editor/PostBuildProcessorAndroid.cs`and replace `androidConfigurationFile` value with your custom filename. This step is mandatory to avoid runtime issues.
 
 > **Note**: To avoid any SDK configuration issues, set the custom config filename before initialization.
 ## Request for ads
