@@ -1,7 +1,7 @@
 <H1 align="center">Playwire Unity SDK</H1>
 
 <p align="center">
-    <a><img alt="Version" src="https://img.shields.io/badge/version-3.3.5-blue"></a>
+    <a><img alt="Version" src="https://img.shields.io/badge/version-3.3.5.0-blue"></a>
     <a href="https://unity.com/"><img alt="Unity 2019.4.30f1 (LTS)" src="https://img.shields.io/badge/Unity 2019.4.30f1 (LTS)-orange.svg?style=flat"></a>
 </p>
 
@@ -178,6 +178,14 @@ string BannerAdUnitId = "Banner";
 PlaywireSDK.ShowBanner(BannerAdUnitId);
 
 PlaywireSDK.HideBanner(BannerAdUnitId);
+```
+
+In case the banner should be deallocated, you have to destroy it, e.g., in your app's [`OnDestroy()`](https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnDestroy.html) method.
+
+```csharp
+string BannerAdUnitId = "Banner";
+
+PlaywireSDK.DestroyBanner(BannerAdUnitId);
 ```
 
 `PlaywireSDKCallback.Banner` provides the banner-related callbacks to inform you of the banner ad lifecycle. You can subscribe to be notified about events and how to handle them.
