@@ -1,7 +1,7 @@
 <H1 align="center">Playwire Unity SDK</H1>
 
 <p align="center">
-    <a><img alt="Version" src="https://img.shields.io/badge/version-3.3.2-blue"></a>
+    <a><img alt="Version" src="https://img.shields.io/badge/version-3.3.5-blue"></a>
     <a href="https://unity.com/"><img alt="Unity 2019.4.30f1 (LTS)" src="https://img.shields.io/badge/Unity 2019.4.30f1 (LTS)-orange.svg?style=flat"></a>
 </p>
 
@@ -394,4 +394,12 @@ See the list below for rewarded-related callbacks.
         public static event Action<PlaywireSDKEventArgs> OnClickedEvent
     }
 }
+```
+
+### Logger
+
+To start monitoring events inside the `Playwire Unity SDK` use logger to log events to the IDE console. The logs can contain information about event's name, ad unit parameters, ad server response, etc.
+
+```csharp
+PlaywireSDK.StartConsoleLogger();
 ```
