@@ -96,9 +96,6 @@ allprojects {
         maven {
             url 'https://android-sdk.is.com/'
         }
-        maven {
-            url "https://s3.amazonaws.com/smaato-sdk-releases/"
-        }
         // ...
     }
     // ...
