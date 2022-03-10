@@ -1,7 +1,7 @@
 <H1 align="center">Playwire Unity SDK</H1>
 
 <p align="center">
-    <a><img alt="Version" src="https://img.shields.io/badge/version-3.4.0-blue"></a>
+    <a><img alt="Version" src="https://img.shields.io/badge/version-3.4.0.1-blue"></a>
     <a href="https://unity.com/"><img alt="Unity 2019.4.30f1 (LTS)" src="https://img.shields.io/badge/Unity 2019.4.30f1 (LTS)-orange.svg?style=flat"></a>
 </p>
 
@@ -95,6 +95,9 @@ allprojects {
         }
         maven {
             url 'https://android-sdk.is.com/'
+        }
+        maven {
+            url "https://s3.amazonaws.com/smaato-sdk-releases/"
         }
         // ...
     }
@@ -347,7 +350,8 @@ void OnEnable ()
 {
     // ...
     PlaywireSDKCallback.Rewarded.OnLoadedEvent += OnRewardedLoadedEvent;
-    PlaywireSDKCallback.Rewarded.OnFailedToLoadEvent += OnRewardedFailedToLoadEvent;
+    PlaywireSDKCallback.Rewarded.OnFailedToLoadEvent += OnRewardedFailedToLoadEvent
+    PlaywireSDKCallback.Rewarded.OnEarnedEvent += OnRewardEarnedEvent;
     // ...
 }
 
@@ -367,6 +371,12 @@ void OnRewardedFailedToLoadEvent(PlaywireSDKEventArgs args)
 {
     // ...
 }
+
+void OnRewardEarnedEvent(PlaywireSDKAdRewardEventArgs args) 
+{
+    Debug.Log("Ad reward earned type: " + args.Type + " amount: " + args.Amount.ToString());
+}
+
 ```
 
 See the list below for rewarded-related callbacks.
