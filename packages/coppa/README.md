@@ -1,7 +1,7 @@
 <H1 align="center">Playwire Unity SDK</H1>
 
 <p align="center">
-    <a><img alt="Version" src="https://img.shields.io/badge/version-3.4.0.1-blue"></a>
+    <a><img alt="Version" src="https://img.shields.io/badge/version-4.0.0-blue"></a>
     <a href="https://unity.com/"><img alt="Unity 2019.4.30f1 (LTS)" src="https://img.shields.io/badge/Unity 2019.4.30f1 (LTS)-orange.svg?style=flat"></a>
 </p>
 
@@ -23,12 +23,9 @@ Follow these steps to import the `Playwire Unity SDK` to your project:
 <img src="readme-resources/package_import.png" alt="package-import" width="600"/>
 
 4. Once importing has been finished, the set of dependencies should be resolved. Follow the [Dependencies installation](#dependencies-installation) section to resolve all required dependencies.
-5. Search for the configuration files emailed by your Playwire Account Manager. You should have files for both iOS and Android.
-6. Copy and paste the file to `Assets/Playwire/Plugins/Resources/iOS` (for the iOS file) and `Assets/Playwire/Plugins/Resources/Android` (for the Android file).
-7. See the [Configuration](#configuration) section for the specific steps on how to work with configuration files, especially if you use a custom configuration filename.
-<img src="readme-resources/resources.png" alt="resources"/>
-
-8. Build and run your Unity project.
+5. Search for the initialization metadata (`publisherId`, `appId` and `version`) emailed by your Playwire Account Manager.
+6. See the [Configuration](#configuration) section to adjust the project's configuration.
+7. Build and run your Unity project.
 
 # Dependencies installation
 
@@ -107,6 +104,27 @@ allprojects {
 
 5. When done, go to `Assets > External Dependency Manager > Android Resolver`, and click `Force Resolve` to start the automatic dependency resolving.
 
+# Configuration
+
+You must provide some modifications for `PostBuildProcessor`. There is a service that simplifies the `Playwire Unity SDK` integration, because it takes over iOS and Android projects adjustments, such as, setup required identifiers, settings and permissions, etc.
+Open `Assets/Playwire/Editor/PostBuildProcessorAndroid.cs` and `Assets/Playwire/Editor/PostBuildProcessoriOS.cs` replace `gamAppId` values with your personal identifiers. These identifiers have to be emailed by your Playwire Account Manager.
+
+This step is mandatory to avoid runtime issues.
+# Migrating from the Playwire Unity SDK 3.X.Y to the Playwire Unity SDK 4.0.0
+
+1. If you haven't made it yet, upgrade to the `Playwire Unity SDK` 4.0.0 package. See the [Installation](#installation) section to import package.
+2. See the [Configuration](#configuration) section to adjust project's configuration.
+3. The `Playwire Unity SDK` 4.0.0 introduces the new approach to fetch config files from the remote, that is why you have to remove old config files, that are stored locally.
+    * Go to `Assets/Playwire/Plugins/Resources/iOS` (for the iOS file) along with `Assets/Playwire/Plugins/Resources/Android` (for the Android file) and remove `*.json` config files.
+    * Go to `Assets/Playwire/Editor` and remove the `PlaywireConfigurationFile.cs` file.
+    <img src="readme-resources/migration_files_to_remove.png" alt="files to remove during migration" width="800">
+4. Resolve all compile time errors and issues regarding public API changes, e.g., `PlaywireSDK.SetConfigName` does not exist anymore. See the [Initialization](#initialization) section to get more details.
+
+# Migrating from the Total Playwire Unity SDK to the COPPA Playwire Unity SDK and vice versa
+
+1. If you haven't made it yet, replace your `Playwire Unity SDK` package with another version package. See the [Installation](#installation) section to import a new package.
+2. See the [Configuration](#configuration) section to adjust project's configuration.
+
 # Usage
 
 ## Initialization
@@ -114,30 +132,29 @@ allprojects {
 Initialize the Playwire Unity SDK in your app’s [`Start()`](https://docs.unity3d.com/ScriptReference/MonoBehaviour.Start.html) method.
 
 ```csharp
-PlaywireSDK.InitializeSDK();
+string publisherId = "YOUR_PUBLISHER_ID";
+string appId;
+string version;
+
+#if UNITY_ANDROID
+    appId = "YOUR_ANDROID_APP_ID"
+    version = "YOUR_ANDROID_APP_VERSION"
+#elif UNITY_IOS
+    appId = "YOUR_IOS_APP_ID"
+    version = "YOUR_IOS_APP_VERSION"
+#else
+    Debug.LogWarning("Unsupported platform.");
+    return;
+#endif
+
+PlaywireSDK.InitializeSDK(publisherId, appId, version);
 ```
+
+> **Note**: A configuration file metadata such as `YOUR_PUBLISHER_ID`, `YOUR_APP_ID`, etc., must be provided by your Playwire Account Manager.
 
 When done, you will receive the `PlaywireSDKCallback.OnSDKInitializedEvent`.
 
 > **Note**: If you call any method without initialization, the SDK notifies you about it in the IDE logs window.
-
-## Configuration
-
-The `Playwire Unity SDK` retrieves configuration data from the JSON file provided by Playwire. If you do not have this file, contact your Playwire Account Manager.
-By default, the `Playwire Unity SDK` looks for **`PWConfigFile.json`**.
-You can also provide a custom filename and set it as the config file for the SDK.
-
-```csharp
-string configName = "CUSTOM_CONFIG_FILE_NAME";
-PlaywireSDK.SetConfigName(configName);
-
-PlaywireSDK.InitializeSDK();
-```
-
-If you use a custom filename, you have to provide some modifications for `PostBuildProcessoriOS` or `PostBuildProcessorAndroid`. There are services that simplify the `Playwire Unity SDK` integration, because it takes over iOS and Android projects adjustments, such as, setup required identifiers, settings and permissions, etc. We do not recommend modifying it unless you have to, such as in case above.
-Open `Assets/Playwire/Editor/PostBuildProcessoriOS.cs` and replace `iOSConfigurationFile` value, then open `Assets/Playwire/Editor/PostBuildProcessorAndroid.cs`and replace `androidConfigurationFile` value with your custom filename. This step is mandatory to avoid runtime issues.
-
-> **Note**: To avoid any SDK configuration issues, set the custom config filename before initialization.
 ## Request for ads
 
 ### Request banner ads
