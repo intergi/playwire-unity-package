@@ -1,7 +1,7 @@
 <H1 align="center">Playwire Unity SDK</H1>
 
 <p align="center">
-    <a><img alt="Version" src="https://img.shields.io/badge/version-4.0.0-blue"></a>
+    <a><img alt="Version" src="https://img.shields.io/badge/version-4.0.1-blue"></a>
     <a href="https://unity.com/"><img alt="Unity 2019.4.30f1 (LTS)" src="https://img.shields.io/badge/Unity 2019.4.30f1 (LTS)-orange.svg?style=flat"></a>
 </p>
 
@@ -110,11 +110,11 @@ You must provide some modifications for `PostBuildProcessor`. There is a service
 Open `Assets/Playwire/Editor/PostBuildProcessorAndroid.cs` and `Assets/Playwire/Editor/PostBuildProcessoriOS.cs` replace `gamAppId` values with your personal identifiers. These identifiers have to be emailed by your Playwire Account Manager.
 
 This step is mandatory to avoid runtime issues.
-# Migrating from the Playwire Unity SDK 3.X.Y to the Playwire Unity SDK 4.0.0
+# Migrating from the Playwire Unity SDK 3.X.Y to the Playwire Unity SDK 4.X.Y
 
-1. If you haven't made it yet, upgrade to the `Playwire Unity SDK` 4.0.0 package. See the [Installation](#installation) section to import package.
+1. If you haven't made it yet, upgrade to the `Playwire Unity SDK` 4.X.Y package. See the [Installation](#installation) section to import package.
 2. See the [Configuration](#configuration) section to adjust project's configuration.
-3. The `Playwire Unity SDK` 4.0.0 introduces the new approach to fetch config files from the remote, that is why you have to remove old config files, that are stored locally.
+3. The `Playwire Unity SDK` 4.X.Y introduces the new approach to fetch config files from the remote, that is why you have to remove old config files, that are stored locally.
     * Go to `Assets/Playwire/Plugins/Resources/iOS` (for the iOS file) along with `Assets/Playwire/Plugins/Resources/Android` (for the Android file) and remove `*.json` config files.
     * Go to `Assets/Playwire/Editor` and remove the `PlaywireConfigurationFile.cs` file.
     <img src="readme-resources/migration_files_to_remove.png" alt="files to remove during migration" width="800">
