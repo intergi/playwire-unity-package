@@ -1,7 +1,7 @@
 <H1 align="center">Playwire Unity SDK</H1>
 
 <p align="center">
-    <a><img alt="Version" src="https://img.shields.io/badge/version-4.0.1-blue"></a>
+    <a><img alt="Version" src="https://img.shields.io/badge/version-4.1.0-blue"></a>
     <a href="https://unity.com/"><img alt="Unity 2019.4.30f1 (LTS)" src="https://img.shields.io/badge/Unity 2019.4.30f1 (LTS)-orange.svg?style=flat"></a>
 </p>
 
@@ -423,6 +423,117 @@ See the list below for rewarded-related callbacks.
         public static event Action<PlaywireSDKAdRewardEventArgs> OnEarnedEvent
 
         /// It is fired when a click has been recorded for the rewarded ad.
+        public static event Action<PlaywireSDKEventArgs> OnClickedEvent
+    }
+}
+```
+
+### Request for app open ads
+
+To display an app open ad on your app, you must first request it and provide the ad unit.
+
+When requesting an app open ad, we recommend that you do so in advance before planning to present it to your user as the loading process may take time.
+
+```csharp
+string AppOpenAdUnitId = "AppOpenAd";
+PlaywireSDK.LoadAppOpenAd(AppOpenAdUnitId);
+```
+
+> **Note**: An app open ad is a one-time-use object, which means it must be loaded again after its shown. Use the `PlaywireSDK.IsAppOpenAdReady(string adUnitId)` method to check if the ad is ready to be presented.
+
+An app open ad will time out after four hours. If you present an ad content that was requested more than four hours, it will no longer be valid and may not earn revenue.
+To ensure you do not show an expired ad, you can check how long it has been since your ad loaded and reload it manually, or you may enable `AppOpenAdReloadOnExpiration` to let the `PlaywireSDK` monitors the ad expiration and take care about reloading the expired ad.
+
+```csharp
+
+string AppOpenAdUnitId = "AppOpenAd";
+
+bool isEnabled = PlaywireSDK.GetAppOpenAdReloadOnExpiration(AppOpenAdUnitId);
+
+if(!isEnabled) {
+    PlaywireSDK.SetAppOpenAdReloadOnExpiration(AppOpenAdUnitId, true);
+}
+```
+
+If the app open ad is loaded successfully, you would receive `PlaywireSDKCallback.AppOpenAd.OnLoadedEvent`. If not, you would receive `PlaywireSDKCallback.AppOpenAd.OnFailedToLoadEvent`.
+In case the app open ad is ready to be displayed, you can present full screen content.
+
+```csharp
+string AppOpenAdUnitId = "AppOpenAd";
+PlaywireSDK.ShowAppOpenAd(AppOpenAdUnitId);
+```
+
+> **Note**: The app open ad is presented only if it is loaded and not shown previously. Otherwise, `PlaywireSDKCallback.AppOpenAd.OnFailedToOpenEvent` is invoked.
+
+As app open ads are designed to be shown when a user brings your app to the foreground, you need to listen to the application pause message. You can do it by implementing the [`OnApplicationPause(bool)`](https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnApplicationPause.html) method, your app will be alerted to app launch and foregrounding events and be able to show the ad.
+
+```csharp
+public void OnApplicationPause(bool paused)
+{
+    string AppOpenAdUnitId = "AppOpenAd";
+    
+    // Display the app open ad when the app enters foreground
+    if (!paused)
+    {
+        PlaywireSDK.ShowAppOpenAd(AppOpenAdUnitId);
+    }
+}
+```
+
+`PlaywireSDKCallback.AppOpenAd` provides 'app open ad'-related callbacks to inform you about an app open ad lifecycle. You can subscribe to be notified about events and how to handle them.
+
+```csharp
+void OnEnable () 
+{
+    // ...
+    PlaywireSDKCallback.AppOpenAd.OnLoadedEvent += OnAppOpenAdLoadedEvent;
+    PlaywireSDKCallback.AppOpenAd.OnFailedToLoadEvent += OnAppOpenAdFailedToLoadEvent;
+    // ...
+}
+
+void OnAppOpenAdLoadedEvent(PlaywireSDKEventArgs args) 
+{
+    // ...
+    bool isAppOpenAdReady = PlaywireSDK.IsAppOpenAdReady(args.AdUnitId);
+
+    if (!isAppOpenAdReady) {
+        // Load app open ad again or show error.
+        return;
+    }
+    PlaywireSDK.ShowAppOpenAd(args.AdUnitId);
+    // ...
+}
+
+void OnAppOpenAdFailedToLoadEvent(PlaywireSDKEventArgs args) 
+{
+    // ...
+}
+```
+
+See the list below for 'app open ad'-related callbacks.
+
+```csharp
+... PlaywireSDKCallback {
+    ... AppOpenAd {
+        /// It is fired when the app open ad successfully loaded full screen content and ready to be presented.
+        public static event Action<PlaywireSDKEventArgs> OnLoadedEvent
+
+        /// It is fired when the app open ad failed to load full screen content.
+        public static event Action<PlaywireSDKEventArgs> OnFailedToLoadEvent
+
+        /// It is fired when the app open ad presented full screen content.
+        public static event Action<PlaywireSDKEventArgs> OnOpenedEvent
+
+        /// It is fired when the app open ad failed to present full screen content.
+        public static event Action<PlaywireSDKEventArgs> OnFailedToOpenEvent
+
+        /// It is fired when an app open ad dismissed full screen content and the user goes to the application.
+        public static event Action<PlaywireSDKEventArgs> OnClosedEvent
+
+        /// It is fired when an impression has been recorded for the app open ad.
+        public static event Action<PlaywireSDKEventArgs> OnRecordedImpressionEvent
+
+        /// It is fired when a click has been recorded for the app open ad.
         public static event Action<PlaywireSDKEventArgs> OnClickedEvent
     }
 }
