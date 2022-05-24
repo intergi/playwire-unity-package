@@ -1,7 +1,7 @@
 <H1 align="center">Playwire Unity SDK</H1>
 
 <p align="center">
-    <a><img alt="Version" src="https://img.shields.io/badge/version-4.1.1-blue"></a>
+    <a><img alt="Version" src="https://img.shields.io/badge/version-4.2.0-blue"></a>
     <a href="https://unity.com/"><img alt="Unity 2019.4.30f1 (LTS)" src="https://img.shields.io/badge/Unity 2019.4.30f1 (LTS)-orange.svg?style=flat"></a>
 </p>
 
@@ -21,7 +21,6 @@ Follow these steps to import the `Playwire Unity SDK` to your project:
 2. Open the Unity Editor, go to `Assets > Import Package > Custom Package`.
 3. In the Import Unity Package window, keep all the files selected, then click `Import`.
 <img src="readme-resources/package_import.png" alt="package-import" width="600"/>
-
 4. Once importing has been finished, the set of dependencies should be resolved. Follow the [Dependencies installation](#dependencies-installation) section to resolve all required dependencies.
 5. Search for the initialization metadata (`publisherId`, `appId` and `version`) emailed by your Playwire Account Manager.
 6. See the [Configuration](#configuration) section to adjust the project's configuration.
@@ -203,6 +202,14 @@ In case the banner should be deallocated, you have to destroy it, e.g., in your 
 string BannerAdUnitId = "Banner";
 
 PlaywireSDK.DestroyBanner(BannerAdUnitId);
+```
+
+In case the banner should be refreshed and the refresh data is available in the config file for this banner, you are able to refresh an ad content.
+
+```csharp
+string BannerAdUnitId = "Banner";
+
+PlaywireSDK.RefreshBanner(BannerAdUnitId);
 ```
 
 `PlaywireSDKCallback.Banner` provides the banner-related callbacks to inform you of the banner ad lifecycle. You can subscribe to be notified about events and how to handle them.
