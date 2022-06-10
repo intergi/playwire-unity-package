@@ -1,7 +1,7 @@
 <H1 align="center">Playwire Unity SDK</H1>
 
 <p align="center">
-    <a><img alt="Version" src="https://img.shields.io/badge/version-4.2.0-blue"></a>
+    <a><img alt="Version" src="https://img.shields.io/badge/version-4.3.0-blue"></a>
     <a href="https://unity.com/"><img alt="Unity 2019.4.30f1 (LTS)" src="https://img.shields.io/badge/Unity 2019.4.30f1 (LTS)-orange.svg?style=flat"></a>
 </p>
 
@@ -538,6 +538,98 @@ See the list below for 'app open ad'-related callbacks.
         public static event Action<PlaywireSDKEventArgs> OnRecordedImpressionEvent
 
         /// It is fired when a click has been recorded for the app open ad.
+        public static event Action<PlaywireSDKEventArgs> OnClickedEvent
+    }
+}
+```
+
+### Request for rewarded interstitial ads
+
+To display a rewarded interstitial ad on your app, you must first request it and provide the ad unit.
+
+When requesting a rewarded interstitial ad, we recommend that you do so in advance before planning to present it to your user as the loading process may take time.
+
+```csharp
+string RewardedIntestitialAdUnitId = "RewardedInterstitial";
+PlaywireSDK.LoadRewardedInterstitial(RewardedIntestitialAdUnitId);
+```
+
+> **Note**: A rewarded interstitial ad is a one-time-use object, which means it must be loaded again after its shown. Use the `PlaywireSDK.IsRewardedInterstitialReady(string adUnitId)` method to check if the ad is ready to be presented.
+
+If the rewarded interstitial ad is loaded successfully, you would receive `PlaywireSDKCallback.RewardedInterstitial.OnLoadedEvent`. If not, you would receive `PlaywireSDKCallback.RewardedInterstitial.OnFailedToLoadEvent`.
+
+In case the rewarded interstitial is ready to be displayed, you can present full screen content.
+
+```csharp
+string RewardedInterstitialAdUnitId = "RewardedInterstitial";
+PlaywireSDK.ShowRewardedInterstitial(RewardedInterstitialAdUnitId);
+```
+
+> **Note**: The rewarded interstitial ad is presented only if it is loaded and not shown previously. Otherwise `PlaywireSDKCallback.RewardedInterstitial.OnFailedToOpenEvent` is invoked.
+
+`PlaywireSDKCallback.RewardedInterstitial` provides 'rewarded interstitial'-related callbacks to inform you about a rewarded interstitial ad lifecycle. You can subscribe to be notified about the events and how to handle them.
+
+```csharp
+void OnEnable () 
+{
+    // ...
+    PlaywireSDKCallback.RewardedInterstitial.OnLoadedEvent += OnRewardedInterstitialLoadedEvent;
+    PlaywireSDKCallback.RewardedInterstitial.OnFailedToLoadEvent += OnRewardedInterstitialFailedToLoadEvent;
+    PlaywireSDKCallback.RewardedInterstitial.OnEarnedEvent += OnRewardInterstitialEarnedEvent;
+    // ...
+}
+
+void OnRewardedInterstitialLoadedEvent(PlaywireSDKEventArgs args) 
+{
+    // ...
+    bool isRewardedInterstitialReady = PlaywireSDK.IsRewardedInterstitialReady(args.AdUnitId);
+
+    if (!isRewardedInterstitialReady) {
+        // Load the rewarded interstitial again or show error.
+        return;
+    }
+    PlaywireSDK.ShowRewardedInterstitial(args.AdUnitId);
+}
+
+void OnRewardedInterstitialFailedToLoadEvent(PlaywireSDKEventArgs args) 
+{
+    // ...
+}
+
+void OnRewardInterstitialEarnedEvent(PlaywireSDKAdRewardEventArgs args) 
+{
+    Debug.Log("Ad reward earned type: " + args.Type + " amount: " + args.Amount.ToString());
+}
+
+```
+
+See the list below for rewarded-related callbacks.
+
+```csharp
+... PlaywireSDKCallback {
+    ... RewardedInterstitial {
+        /// It is fired when the rewarded interstitial ad successfully loaded full screen content and ready to be presented.
+        public static event Action<PlaywireSDKEventArgs> OnLoadedEvent
+
+        /// It is fired when the rewarded interstitial ad failed to load full screen content.
+        public static event Action<PlaywireSDKEventArgs> OnFailedToLoadEvent
+
+        /// It is fired when the rewarded interstitial ad presented full screen content.
+        public static event Action<PlaywireSDKEventArgs> OnOpenedEvent
+
+        /// It is fired when the rewarded interstitial ad failed to present full screen content.
+        public static event Action<PlaywireSDKEventArgs> OnFailedToOpenEvent
+
+        /// It is fired when an rewarded interstitial ad dismissed full screen content and the user goes back to the application screen.
+        public static event Action<PlaywireSDKEventArgs> OnClosedEvent
+
+        /// It is fired when an impression has been recorded for the rewarded interstitial ad.
+        public static event Action<PlaywireSDKEventArgs> OnRecordedImpressionEvent
+
+        /// It is fired when a reward has been earned.
+        public static event Action<PlaywireSDKAdRewardEventArgs> OnEarnedEvent
+
+        /// It is fired when a click has been recorded for the rewarded interstitial ad.
         public static event Action<PlaywireSDKEventArgs> OnClickedEvent
     }
 }
