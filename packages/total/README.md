@@ -1,7 +1,7 @@
 <H1 align="center">Playwire Unity SDK</H1>
 
 <p align="center">
-    <a><img alt="Version" src="https://img.shields.io/badge/version-4.3.0-blue"></a>
+    <a><img alt="Version" src="https://img.shields.io/badge/version-5.0.0-blue"></a>
     <a href="https://unity.com/"><img alt="Unity 2019.4.30f1 (LTS)" src="https://img.shields.io/badge/Unity 2019.4.30f1 (LTS)-orange.svg?style=flat"></a>
 </p>
 
@@ -91,9 +91,6 @@ allprojects {
         }
         maven {
             url 'https://android-sdk.is.com/'
-        }
-        maven {
-            url "https://s3.amazonaws.com/smaato-sdk-releases/"
         }
         // ...
     }
@@ -629,7 +626,7 @@ See the list below for rewarded-related callbacks.
         /// It is fired when an impression has been recorded for the rewarded interstitial ad.
         public static event Action<PlaywireSDKEventArgs> OnRecordedImpressionEvent
 
-        /// It is fired when a reward has been earned.
+        /// It is fired when a reward interstitial has been earned.
         public static event Action<PlaywireSDKAdRewardEventArgs> OnEarnedEvent
 
         /// It is fired when a click has been recorded for the rewarded interstitial ad.
