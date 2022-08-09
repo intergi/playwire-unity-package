@@ -1,7 +1,7 @@
 <H1 align="center">Playwire Unity SDK</H1>
 
 <p align="center">
-    <a><img alt="Version" src="https://img.shields.io/badge/version-5.0.0-blue"></a>
+    <a><img alt="Version" src="https://img.shields.io/badge/version-5.1.0.0.0-blue"></a>
     <a href="https://unity.com/"><img alt="Unity 2019.4.30f1 (LTS)" src="https://img.shields.io/badge/Unity 2019.4.30f1 (LTS)-orange.svg?style=flat"></a>
 </p>
 
@@ -11,7 +11,7 @@
 
 - Unity 2019.4.30f1+ (LTS)
 - iOS 11.0+
-- Android 5.0+ (API 21+)
+- Android 5.0+ (API 25+)
 
 # Installation
 
@@ -91,6 +91,9 @@ allprojects {
         }
         maven {
             url 'https://android-sdk.is.com/'
+        }
+        maven {
+            url 'https://repo.brightcove.com/releases'
         }
         // ...
     }
