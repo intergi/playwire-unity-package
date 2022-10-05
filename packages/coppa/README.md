@@ -1,7 +1,7 @@
 <H1 align="center">Playwire Unity SDK</H1>
 
 <p align="center">
-    <a><img alt="Version" src="https://img.shields.io/badge/version-5.1.1.0.0-blue"></a>
+    <a><img alt="Version" src="https://img.shields.io/badge/version-6.0.0.0.0-blue"></a>
     <a href="https://unity.com/"><img alt="Unity 2019.4.30f1 (LTS)" src="https://img.shields.io/badge/Unity 2019.4.30f1 (LTS)-orange.svg?style=flat"></a>
 </p>
 
@@ -22,7 +22,7 @@ Follow these steps to import the `Playwire Unity SDK` to your project:
 3. In the Import Unity Package window, keep all the files selected, then click `Import`.
 <img src="readme-resources/package_import.png" alt="package-import" width="600"/>
 4. Once importing has been finished, the set of dependencies should be resolved. Follow the [Dependencies installation](#dependencies-installation) section to resolve all required dependencies.
-5. Search for the initialization metadata (`publisherId`, `appId` and `version`) emailed by your Playwire Account Manager.
+5. Search for the initialization metadata (`publisherId` and `appId`) emailed by your Playwire Account Manager.
 6. See the [Configuration](#configuration) section to adjust the project's configuration.
 7. Build and run your Unity project.
 
@@ -136,23 +136,20 @@ Initialize the Playwire Unity SDK in your app’s [`Start()`](https://docs.unity
 ```csharp
 string publisherId = "YOUR_PUBLISHER_ID";
 string appId;
-string version;
 
 #if UNITY_ANDROID
     appId = "YOUR_ANDROID_APP_ID"
-    version = "YOUR_ANDROID_APP_VERSION"
 #elif UNITY_IOS
     appId = "YOUR_IOS_APP_ID"
-    version = "YOUR_IOS_APP_VERSION"
 #else
     Debug.LogWarning("Unsupported platform.");
     return;
 #endif
 
-PlaywireSDK.InitializeSDK(publisherId, appId, version);
+PlaywireSDK.InitializeSDK(publisherId, appId);
 ```
 
-> **Note**: A configuration file metadata such as `YOUR_PUBLISHER_ID`, `YOUR_APP_ID`, etc., must be provided by your Playwire Account Manager.
+> **Note**: A configuration file metadata such as `YOUR_PUBLISHER_ID` and `YOUR_APP_ID` must be provided by your Playwire Account Manager.
 
 When done, you will receive the `PlaywireSDKCallback.OnSDKInitializedEvent`.
 
