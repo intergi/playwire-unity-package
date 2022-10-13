@@ -1,7 +1,7 @@
 <H1 align="center">Playwire Unity SDK</H1>
 
 <p align="center">
-    <a><img alt="Version" src="https://img.shields.io/badge/version-6.0.0.0.0-blue"></a>
+    <a><img alt="Version" src="https://img.shields.io/badge/version-6.1.0.0.0-blue"></a>
     <a href="https://unity.com/"><img alt="Unity 2019.4.30f1 (LTS)" src="https://img.shields.io/badge/Unity 2019.4.30f1 (LTS)-orange.svg?style=flat"></a>
 </p>
 
@@ -11,7 +11,7 @@
 
 - Unity 2019.4.30f1+ (LTS)
 - iOS 11.0+
-- Android 5.0+ (API 25+)
+- Android 5.0+ (API 21+)
 
 # Installation
 
@@ -79,6 +79,15 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 allprojects {
     // ...
+    buildscript {
+        // ...
+        dependencies {
+            // ...
+            classpath 'com.google.gms:google-services:4.3.13'
+            **BUILD_SCRIPT_DEPS**
+        }
+    }
+
     repositories {**ARTIFACTORYREPOSITORY**
         // ...
         maven {
@@ -91,9 +100,6 @@ allprojects {
         }
         maven {
             url 'https://android-sdk.is.com/'
-        }
-        maven {
-            url 'https://repo.brightcove.com/releases'
         }
         // ...
     }
@@ -112,16 +118,6 @@ You must provide some modifications for `PostBuildProcessor`. There is a service
 Open `Assets/Playwire/Editor/PostBuildProcessorAndroid.cs` and `Assets/Playwire/Editor/PostBuildProcessoriOS.cs` replace `gamAppId` values with your personal identifiers. These identifiers have to be emailed by your Playwire Account Manager.
 
 This step is mandatory to avoid runtime issues.
-# Migrating from the Playwire Unity SDK 3.X.Y to the Playwire Unity SDK 4.X.Y
-
-1. If you haven't made it yet, upgrade to the `Playwire Unity SDK` 4.X.Y package. See the [Installation](#installation) section to import package.
-2. See the [Configuration](#configuration) section to adjust project's configuration.
-3. The `Playwire Unity SDK` 4.X.Y introduces the new approach to fetch config files from the remote, that is why you have to remove old config files, that are stored locally.
-    * Go to `Assets/Playwire/Plugins/Resources/iOS` (for the iOS file) along with `Assets/Playwire/Plugins/Resources/Android` (for the Android file) and remove `*.json` config files.
-    * Go to `Assets/Playwire/Editor` and remove the `PlaywireConfigurationFile.cs` file.
-    <img src="readme-resources/migration_files_to_remove.png" alt="files to remove during migration" width="800">
-4. Resolve all compile time errors and issues regarding public API changes, e.g., `PlaywireSDK.SetConfigName` does not exist anymore. See the [Initialization](#initialization) section to get more details.
-
 # Migrating from the Total Playwire Unity SDK to the COPPA Playwire Unity SDK and vice versa
 
 1. If you haven't made it yet, replace your `Playwire Unity SDK` package with another version package. See the [Installation](#installation) section to import a new package.
@@ -154,6 +150,34 @@ PlaywireSDK.InitializeSDK(publisherId, appId);
 When done, you will receive the `PlaywireSDKCallback.OnSDKInitializedEvent`.
 
 > **Note**: If you call any method without initialization, the SDK notifies you about it in the IDE logs window.
+
+### Firebase Initialization
+
+If Firebase is integrated to the project, you must initialize the Playwire Unity SDK once you resolve all Firebase dependencies. See the [Firebase guide](https://firebase.google.com/docs/unity/setup) to complete the integration properly.
+
+```csharp
+using Firebase;
+
+Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
+    var dependencyStatus = task.Result;
+    if (dependencyStatus == Firebase.DependencyStatus.Available) {
+        string publisherId = "YOUR_PUBLISHER_ID";
+        string appId;
+
+        #if UNITY_ANDROID
+            appId = "YOUR_ANDROID_APP_ID"
+        #elif UNITY_IOS
+            appId = "YOUR_IOS_APP_ID"
+        #else
+            Debug.LogWarning("Unsupported platform.");
+            return;
+        #endif
+
+        PlaywireSDK.InitializeSDK(publisherId, appId);
+    }
+});
+```
+
 ## Request for ads
 
 ### Request banner ads
