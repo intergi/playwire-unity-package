@@ -1,7 +1,7 @@
 <H1 align="center">Playwire Unity SDK</H1>
 
 <p align="center">
-    <a><img alt="Version" src="https://img.shields.io/badge/version-8.0.0.0.1-blue"></a>
+    <a><img alt="Version" src="https://img.shields.io/badge/version-8.1.0.0.0-blue"></a>
     <a href="https://unity.com/"><img alt="Unity 2019.4.30f1 (LTS)" src="https://img.shields.io/badge/Unity 2019.4.30f1 (LTS)-orange.svg?style=flat"></a>
 </p>
 
@@ -182,6 +182,16 @@ Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
 ```
 
 ## Request for ads
+
+## Test ads
+
+To avoid ad filling issues during development, you may enable the 'test mode' to receive test ad creatives. It should be enabled before any ads requests, e.g. befor SDK initialization.
+
+```csharp
+PlaywireSDK.Test = true;
+```
+
+> **Note**: The test mode must be enabled only for development buids. Make sure you disabled it for production builds, otherwise it may impact on revenue.
 
 ### Request banner ads
 
