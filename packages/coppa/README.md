@@ -1,7 +1,7 @@
 <H1 align="center">Playwire Unity SDK</H1>
 
 <p align="center">
-    <a><img alt="Version" src="https://img.shields.io/badge/version-8.1.0.0.0-blue"></a>
+    <a><img alt="Version" src="https://img.shields.io/badge/version-8.2.0.0.0-blue"></a>
     <a href="https://unity.com/"><img alt="Unity 2019.4.30f1 (LTS)" src="https://img.shields.io/badge/Unity 2019.4.30f1 (LTS)-orange.svg?style=flat"></a>
 </p>
 
@@ -185,13 +185,13 @@ Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
 
 ## Test ads
 
-To avoid ad filling issues during development, you may enable the 'test mode' to receive test ad creatives. It should be enabled before any ads requests, e.g. befor SDK initialization.
+To avoid ad filling issues during development, you may enable the 'test mode' to receive test ad creatives. It should be enabled before any ads requests, e.g. before SDK initialization. For banners, interstitials and app open ads, test mode will show a blue ad. For video ads, i.e - rewarded and rewarded interstitials, test mode will show an actual video instead of a blue ad.
 
 ```csharp
 PlaywireSDK.Test = true;
 ```
 
-> **Note**: The test mode must be enabled only for development buids. Make sure you disabled it for production builds, otherwise it may impact on revenue.
+> **Note**: The test mode must be enabled only for development builds. Make sure you disabled it for production builds, otherwise it may impact on revenue.
 
 ### Request banner ads
 
@@ -202,6 +202,16 @@ To display a banner ad on your app, you must first request for the ad. Provide t
 ```csharp
 string BannerAdUnitId = "Banner";
 PlaywireSDK.LoadBanner(BannerAdUnitId, PlaywireSDKBase.AdPosition.BottomCenter);
+```
+
+If you need to provide custom targets which will be included in an ad request, pass `customTargets` argument to the load method.
+
+```csharp
+string BannerAdUnitId = "Banner";
+Dictionary<string, string> customTargets = new Dictionary<string, string>();
+customTargets.Add("segment", "sport");
+customTargets.Add("location", "nearby");
+PlaywireSDK.LoadBanner(BannerAdUnitId, PlaywireSDKBase.AdPosition.BottomCenter, customTargets);
 ```
 
 See table with available banner positions below.
@@ -307,6 +317,16 @@ string InterstitialAdUnitId = "Interstitial";
 PlaywireSDK.LoadInterstitial(InterstitialAdUnitId);
 ```
 
+If you need to provide custom targets which will be included in an ad request, pass `customTargets` argument to the load method.
+
+```csharp
+string InterstitialAdUnitId = "Interstitial";
+Dictionary<string, string> customTargets = new Dictionary<string, string>();
+customTargets.Add("segment", "sport");
+customTargets.Add("location", "nearby");
+PlaywireSDK.LoadInterstitial(InterstitialAdUnitId, customTargets);
+```
+
 > **Note**: An interstitial ad is a one-time-use object, which means it must be loaded again after its shown. Use the `PlaywireSDK.IsInterstitialReady(string adUnitId)` method to check if the ad is ready to be presented.
 
 If the interstitial is loaded successfully, you would receive `PlaywireSDKCallback.Interstitial.OnLoadedEvent`. If not, you would receive `PlaywireSDKCallback.Interstitial.OnFailedToLoadEvent`.
@@ -387,6 +407,16 @@ When requesting a rewarded ad, we recommend that you do so in advance before pla
 ```csharp
 string RewardedAdUnitId = "Rewarded";
 PlaywireSDK.LoadRewarded(RewardedAdUnitId);
+```
+
+If you need to provide custom targets which will be included in an ad request, pass `customTargets` argument to the load method.
+
+```csharp
+string RewardedAdUnitId = "Rewarded";
+Dictionary<string, string> customTargets = new Dictionary<string, string>();
+customTargets.Add("segment", "sport");
+customTargets.Add("location", "nearby");
+PlaywireSDK.LoadRewarded(RewardedAdUnitId, customTargets);
 ```
 
 > **Note**: A rewarded ad is a one-time-use object, which means it must be loaded again after its shown. Use the `PlaywireSDK.IsRewardedReady(string adUnitId)` method to check if the ad is ready to be presented.
@@ -478,6 +508,16 @@ When requesting an app open ad, we recommend that you do so in advance before pl
 ```csharp
 string AppOpenAdUnitId = "AppOpenAd";
 PlaywireSDK.LoadAppOpenAd(AppOpenAdUnitId);
+```
+
+If you need to provide custom targets which will be included in an ad request, pass `customTargets` argument to the load method.
+
+```csharp
+string AppOpenAdUnitId = "AppOpenAd";
+Dictionary<string, string> customTargets = new Dictionary<string, string>();
+customTargets.Add("segment", "sport");
+customTargets.Add("location", "nearby");
+PlaywireSDK.LoadAppOpenAd(AppOpenAdUnitId, customTargets);
 ```
 
 > **Note**: An app open ad is a one-time-use object, which means it must be loaded again after its shown. Use the `PlaywireSDK.IsAppOpenAdReady(string adUnitId)` method to check if the ad is ready to be presented.
@@ -589,6 +629,16 @@ When requesting a rewarded interstitial ad, we recommend that you do so in advan
 ```csharp
 string RewardedIntestitialAdUnitId = "RewardedInterstitial";
 PlaywireSDK.LoadRewardedInterstitial(RewardedIntestitialAdUnitId);
+```
+
+If you need to provide custom targets which will be included in an ad request, pass `customTargets` argument to the load method.
+
+```csharp
+string RewardedIntestitialAdUnitId = "RewardedInterstitial";
+Dictionary<string, string> customTargets = new Dictionary<string, string>();
+customTargets.Add("segment", "sport");
+customTargets.Add("location", "nearby");
+PlaywireSDK.LoadRewardedInterstitial(RewardedIntestitialAdUnitId, customTargets);
 ```
 
 > **Note**: A rewarded interstitial ad is a one-time-use object, which means it must be loaded again after its shown. Use the `PlaywireSDK.IsRewardedInterstitialReady(string adUnitId)` method to check if the ad is ready to be presented.
