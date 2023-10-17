@@ -1,7 +1,7 @@
 <H1 align="center">Playwire Unity SDK</H1>
 
 <p align="center">
-    <a><img alt="Version" src="https://img.shields.io/badge/version-8.4.1.0.0-blue"></a>
+    <a><img alt="Version" src="https://img.shields.io/badge/version-9.0.0.0.0-blue"></a>
     <a href="https://unity.com/"><img alt="Unity 2019.4.30f1 (LTS)" src="https://img.shields.io/badge/Unity 2019.4.30f1 (LTS)-orange.svg?style=flat"></a>
 </p>
 
@@ -204,16 +204,6 @@ string BannerAdUnitId = "Banner";
 PlaywireSDK.LoadBanner(BannerAdUnitId, PlaywireSDKBase.AdPosition.BottomCenter);
 ```
 
-If you need to provide custom targets which will be included in an ad request, pass `customTargets` argument to the load method.
-
-```csharp
-string BannerAdUnitId = "Banner";
-Dictionary<string, string> customTargets = new Dictionary<string, string>();
-customTargets.Add("segment", "sport");
-customTargets.Add("location", "nearby");
-PlaywireSDK.LoadBanner(BannerAdUnitId, PlaywireSDKBase.AdPosition.BottomCenter, customTargets);
-```
-
 See table with available banner positions below.
 
 | PlaywireSDKBase.AdPosition     | Description                                                 |
@@ -317,16 +307,6 @@ string InterstitialAdUnitId = "Interstitial";
 PlaywireSDK.LoadInterstitial(InterstitialAdUnitId);
 ```
 
-If you need to provide custom targets which will be included in an ad request, pass `customTargets` argument to the load method.
-
-```csharp
-string InterstitialAdUnitId = "Interstitial";
-Dictionary<string, string> customTargets = new Dictionary<string, string>();
-customTargets.Add("segment", "sport");
-customTargets.Add("location", "nearby");
-PlaywireSDK.LoadInterstitial(InterstitialAdUnitId, customTargets);
-```
-
 > **Note**: An interstitial ad is a one-time-use object, which means it must be loaded again after its shown. Use the `PlaywireSDK.IsInterstitialReady(string adUnitId)` method to check if the ad is ready to be presented.
 
 If the interstitial is loaded successfully, you would receive `PlaywireSDKCallback.Interstitial.OnLoadedEvent`. If not, you would receive `PlaywireSDKCallback.Interstitial.OnFailedToLoadEvent`.
@@ -407,16 +387,6 @@ When requesting a rewarded ad, we recommend that you do so in advance before pla
 ```csharp
 string RewardedAdUnitId = "Rewarded";
 PlaywireSDK.LoadRewarded(RewardedAdUnitId);
-```
-
-If you need to provide custom targets which will be included in an ad request, pass `customTargets` argument to the load method.
-
-```csharp
-string RewardedAdUnitId = "Rewarded";
-Dictionary<string, string> customTargets = new Dictionary<string, string>();
-customTargets.Add("segment", "sport");
-customTargets.Add("location", "nearby");
-PlaywireSDK.LoadRewarded(RewardedAdUnitId, customTargets);
 ```
 
 > **Note**: A rewarded ad is a one-time-use object, which means it must be loaded again after its shown. Use the `PlaywireSDK.IsRewardedReady(string adUnitId)` method to check if the ad is ready to be presented.
@@ -508,16 +478,6 @@ When requesting an app open ad, we recommend that you do so in advance before pl
 ```csharp
 string AppOpenAdUnitId = "AppOpenAd";
 PlaywireSDK.LoadAppOpenAd(AppOpenAdUnitId);
-```
-
-If you need to provide custom targets which will be included in an ad request, pass `customTargets` argument to the load method.
-
-```csharp
-string AppOpenAdUnitId = "AppOpenAd";
-Dictionary<string, string> customTargets = new Dictionary<string, string>();
-customTargets.Add("segment", "sport");
-customTargets.Add("location", "nearby");
-PlaywireSDK.LoadAppOpenAd(AppOpenAdUnitId, customTargets);
 ```
 
 > **Note**: An app open ad is a one-time-use object, which means it must be loaded again after its shown. Use the `PlaywireSDK.IsAppOpenAdReady(string adUnitId)` method to check if the ad is ready to be presented.
@@ -631,16 +591,6 @@ string RewardedIntestitialAdUnitId = "RewardedInterstitial";
 PlaywireSDK.LoadRewardedInterstitial(RewardedIntestitialAdUnitId);
 ```
 
-If you need to provide custom targets which will be included in an ad request, pass `customTargets` argument to the load method.
-
-```csharp
-string RewardedIntestitialAdUnitId = "RewardedInterstitial";
-Dictionary<string, string> customTargets = new Dictionary<string, string>();
-customTargets.Add("segment", "sport");
-customTargets.Add("location", "nearby");
-PlaywireSDK.LoadRewardedInterstitial(RewardedIntestitialAdUnitId, customTargets);
-```
-
 > **Note**: A rewarded interstitial ad is a one-time-use object, which means it must be loaded again after its shown. Use the `PlaywireSDK.IsRewardedInterstitialReady(string adUnitId)` method to check if the ad is ready to be presented.
 
 If the rewarded interstitial ad is loaded successfully, you would receive `PlaywireSDKCallback.RewardedInterstitial.OnLoadedEvent`. If not, you would receive `PlaywireSDKCallback.RewardedInterstitial.OnFailedToLoadEvent`.
@@ -721,6 +671,99 @@ See the list below for rewarded-related callbacks.
     }
 }
 ```
+
+### Custom Targeting
+
+If you require specifying the type of content of the ads that will be delivered you could tag your requests with specific words.
+
+Tags are handled in the `PWTargeting` class. You can pass `Dictionary<string, string>` with targets, set and remove tags at desired indexes or using arrays.
+
+```csharp
+Dictionary<string, string> targets = new Dictionary<string, string>() {
+    {"custom_key", "ad_unit"},
+};
+
+PlaywireSDKTargeting targeting = new PlaywireSDKTargeting();
+
+// Add dictionary
+targeting.Add(targets);
+
+// Remove keys
+string[] keys = new string[1] { "custom_key" };
+targeting.Remove(keys);
+
+// Set client tag at index 1
+targeting.SetClientTag("custom_tag", 1);
+
+// Remove client tag at index 1
+targeting.RemoveClientTag(1);
+
+// Clear all
+targeting.Clear();
+```
+
+The custom targeting can be set at several levels:
+
+1. **Config level**
+
+    You can decide to tag a specific ad unit in the backend configuration, no code will be required in the application. Please contact your Account Manager for it.
+
+2. **Global level**
+
+    You can put tags in the global PlaywireSDK object. These tags will be applied to every request of every ad unit in your application.
+
+    ```csharp
+    Dictionary<string, string> targets = new Dictionary<string, string>() {
+        {"global_key", "global"},
+    };
+    PlaywireSDKTargeting targeting = new PlaywireSDKTargeting();
+    targeting.Add(targets);
+    targeting.SetClientTag("global_tag", 1);
+
+    PlaywireSDK.SetGlobalTargeting(targeting);
+    ```
+
+3. **Ad unit level**
+
+    You can put tags in the ad unit level and they will be taken into account for any future requests on these ad units. In view ads like banners, changing tags after loading the ad will take effect in future refresh of ad content.
+
+    ```csharp
+    Dictionary<string, string> targets = new Dictionary<string, string>() {
+        {"ad_unit_key", "ad_unit"},
+    };
+    PlaywireSDKTargeting targeting = new PlaywireSDKTargeting();
+    targeting.Add(targets);
+    targeting.SetClientTag("ad_unit_tag", 1);
+
+    string AdUnitId = "AdUnitId";
+
+    PlaywireSDK.SetBannerTargeting(AdUnitId, targeting);
+    PlaywireSDK.SetInterstitialTargeting(AdUnitId, targeting);
+    PlaywireSDK.SetRewardedTargeting(AdUnitId, targeting);
+    PlaywireSDK.SetAppOpenAdTargeting(AdUnitId, targeting);
+    PlaywireSDK.SetRewardedInterstitialTargeting(AdUnitId, targeting);
+    ```
+
+4. **Ad unit loading level**
+
+    If you need to provide the custom targets which will be included in a single ad request, pass the `targeting` argument to the load method.
+
+    ```csharp
+
+    Dictionary<string, string> targets = new Dictionary<string, string>() {
+        {"ad_unit_key", "ad_unit"},
+    };
+    PlaywireSDKTargeting targeting = new PlaywireSDKTargeting();
+    targeting.Add(targets);
+
+    string AdUnitId = "AdUnitId";
+
+    PlaywireSDK.LoadBanner(AdUnitId, PlaywireSDKBase.AdPosition.BottomCenter, targeting);
+    PlaywireSDK.LoadInterstitial(AdUnitId, targeting);
+    PlaywireSDK.LoadRewarded(AdUnitId, targeting);
+    PlaywireSDK.LoadAppOpenAd(AdUnitId, targeting);
+    PlaywireSDK.LoadRewardedInterstitial(AdUnitId, targeting);
+    ```
 
 ### Logger
 
