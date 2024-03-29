@@ -104,6 +104,9 @@ allprojects {
         maven {
             url 'https://artifact.bytedance.com/repository/pangle/'
         }
+        maven {
+            url 'https://cboost.jfrog.io/artifactory/chartboost-ads/'
+        }
         // ...
     }
     // ...
@@ -127,6 +130,29 @@ This step is mandatory to avoid runtime issues.
 2. See the [Configuration](#configuration) section to adjust project's configuration.
 
 # Usage
+
+## CMP
+
+To comply with the [General Data Protection Regulation (GDPR) of the Interactive Advertising Bureau (iab)](https://www.iab.com/topics/privacy/gdpr), the Playwire Unity SDK uses Google UMP as a consent management platform (CMP). Google UMP is a IAB-compliant CMP, certified under the TCF framework.
+
+If you want to use your own CMP and avoid colliding with the Playwire Unity SDK's CMP, it has to be compatible with TCF.
+
+If you will not use our default Google UMP as a CMP, you must declare this before initializing the Playwire Unity SDK.
+You can select between:
+
+- `GoogleUmp`: This is the default and does not have to be declared.
+- `AlreadyLaunched`: Indicates that you are using a third-party CMP, and that it has been initialized. You must launch your CMP and wait for the user response before you initialize our SDK.
+- `None`: No CMP will be used. (This will dramatically affect your revenue!).
+
+> **Note**: If you do not plan to use Google UMP, please contact your Account Coordinator as we may need to apply extra settings to your account so ad delivery can perform as expected.
+
+```csharp
+PlaywireSDK.CMP = PlaywireSDKBase.CMP.GoogleUMP;
+// PlaywireSDK.CMP = PlaywireSDKBase.CMP.AlreadyLaunched;
+// PlaywireSDK.CMP = PlaywireSDKBase.CMP.None;
+
+PlaywireSDK.InitializeSDK("YOUR_PUBLISHER_ID", "YOUR_AN_APP_ID");
+```
 
 ## Initialization
 
