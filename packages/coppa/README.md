@@ -1,7 +1,7 @@
 <H1 align="center">Playwire Unity SDK</H1>
 
 <p align="center">
-    <a><img alt="Version" src="https://img.shields.io/badge/version-9.0.1.0.0-blue"></a>
+    <a><img alt="Version" src="https://img.shields.io/badge/version-9.4.0.0.0-blue"></a>
     <a href="https://unity.com/"><img alt="Unity 2019.4.30f1 (LTS)" src="https://img.shields.io/badge/Unity 2019.4.30f1 (LTS)-orange.svg?style=flat"></a>
 </p>
 
@@ -10,7 +10,7 @@
 # Requirements
 
 - Unity 2019.4.30f1+ (LTS)
-- iOS 12.0+
+- iOS 13.0+
 - Android 5.0+ (API 21+)
 
 # Installation
