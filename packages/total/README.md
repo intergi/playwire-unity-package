@@ -1,7 +1,7 @@
 <H1 align="center">Playwire Unity SDK</H1>
 
 <p align="center">
-    <a><img alt="Version" src="https://img.shields.io/badge/version-10.8.0.0.0-blue"></a>
+    <a><img alt="Version" src="https://img.shields.io/badge/version-11.0.0.0.0-blue"></a>
     <a href="https://unity.com/"><img alt="Unity 2022.3.50f1 (LTS)" src="https://img.shields.io/badge/Unity 2022.3.50f1 (LTS)-orange.svg?style=flat"></a>
 </p>
 
@@ -10,8 +10,8 @@
 # Requirements
 
 - Unity 6000.0.23f1+ (LTS)
-- iOS 13.0+
-- Android 8.0+ (API 24+)
+- iOS 18.0+ XCode 16.0
+- Android 8.0+ (API 25+)
 
 # Installation
 
@@ -94,6 +94,7 @@ dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
         **ARTIFACTORYREPOSITORY**
+        mavenLocal()
         google()
         mavenCentral()
         flatDir {
