@@ -10,8 +10,8 @@
 # Requirements
 
 - Unity 6000.0.23f1+ (LTS)
-- iOS 18.0+ XCode 16.0
-- Android 8.0+ (API 25+)
+- iOS 13.0+ XCode 16.0
+- Android API 25+
 
 # Installation
 
