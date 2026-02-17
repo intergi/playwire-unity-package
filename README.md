@@ -1,8 +1,7 @@
 <H1 align="center">Playwire Unity SDK</H1>
 
 <p align="center">
-    <a><img alt="Version" src="https://img.shields.io/badge/version-11.6.0.0.0-blue"></a>
-    <a href="https://unity.com/"><img alt="Unity 2022.3.50f1 (LTS)" src="https://img.shields.io/badge/Unity 2022.3.50f1 (LTS)-orange.svg?style=flat"></a>
+    <a><img alt="Version" src="https://img.shields.io/badge/version-12.0.0-blue"></a>
 </p>
 
 ---
@@ -10,7 +9,7 @@
 # Requirements
 
 - Unity 6000.0.23f1+ (LTS)
-- iOS 13.0+ XCode 16.0
+- iOS 13.0+ XCode 26.0
 - Android API 25+
 
 # Installation
@@ -50,19 +49,7 @@ The External Dependency Manager uses [Gradle](https://docs.gradle.org/current/us
 
 To resolve required dependencies for Android you should follow next steps:
 
-1. As the `Playwire Unity SDK` consumes native Android SDK from the remote GitHub Packages repository, even though such SDK is accessible publicly there, GitHub still requires to do authentication, that is why the `Playwire Unity SDK` is configured to have **`keystore.properties`** that should contain credentials to access GitHub package. See official [GitHub Package's guide](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry) to get more details about Github authentication.
-
-> **Note**: To learn more about `keystore.properties` usage, please visit official [Android Developer's Tutorial](https://developer.android.com/studio/publish/app-signing#secure-shared-keystore)
-
-You have to create a `keystore.properties` file by yourself using the template below and put to `Assets/Playwire/Plugin/Resources/Android` directory.
-
-```
-maven_repo_read_url=https://maven.pkg.github.com/intergi/playwire-android-binaries
-maven_repo_read_username=<GITHUB_USERNAME>
-maven_repo_read_password=<GITHUB_ACCESS_TOKEN>
-```
-
-2. Go to `Edit > Project Settings > Player > Settings for Android > Publishing Settings` and check `Custom Gradle Settings Template`. 
+1. Go to `Edit > Project Settings > Player > Settings for Android > Publishing Settings` and check `Custom Gradle Settings Template`. 
 
 <img src="readme-resources/player_android_settings.png" alt="player_android_settings" width="700"/>
 
@@ -82,49 +69,31 @@ pluginManagement {
 include ':launcher', ':unityLibrary'
 **INCLUDES**
 
-def propertiesFile = new File(rootDir, 'keystore.properties')
-def keystoreProperties = new Properties()
-if (propertiesFile.exists()) {
-    propertiesFile.withInputStream { stream ->
-        keystoreProperties.load(stream)
-    }
-}
-
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
         **ARTIFACTORYREPOSITORY**
-        mavenLocal()
         google()
         mavenCentral()
         flatDir {
             dirs "${project(':unityLibrary').projectDir}/libs"
         }
-        maven {
-            url 'https://android-sdk.is.com/'
-        }
-        maven {
-            url 'https://artifact.bytedance.com/repository/pangle/'
-        }
-        maven {
-            url 'https://cboost.jfrog.io/artifactory/chartboost-ads/'
-        }
-        maven {
-           name = "GitHubPackages"
-           url = uri(keystoreProperties['maven_repo_read_url'])
-           credentials {
-               username = keystoreProperties['maven_repo_read_username']
-               password = keystoreProperties['maven_repo_read_password']
-           }
-       }
+        maven { url 'https://android-sdk.is.com/' }
+        maven { url 'https://artifact.bytedance.com/repository/pangle/' }
+        maven { url 'https://cboost.jfrog.io/artifactory/chartboost-ads/' }
+        maven { url 'https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea' }
+        maven { url 'https://repo.pubmatic.com/artifactory/public-repos/' }
+        maven { url 'https://maven.ogury.co' }
+        maven { url 'https://s3.amazonaws.com/smaato-sdk-releases/' }
+        maven { url 'https://verve.jfrog.io/artifactory/verve-gradle-release' }
     }
 }
 ```
-3. Go to `Edit > Project Settings > Player > Settings for Android > Publishing Settings` and check `Custom Main Gradle Template` checkbox.
-4. Go to `Assets > External Dependency Manager > Android Resolver > Settings`, and verify that `Patch mainTemplate.gradle` is enabled.
+1. Go to `Edit > Project Settings > Player > Settings for Android > Publishing Settings` and check `Custom Main Gradle Template` checkbox.
+1. Go to `Assets > External Dependency Manager > Android Resolver > Settings`, and verify that `Patch mainTemplate.gradle` is enabled.
 <img src="readme-resources/patch_main_gradle.png" alt="patch_main_gradle" width="700"/>
 
-5. When done, go to `Assets > External Dependency Manager > Android Resolver`, and click `Force Resolve` to start the automatic dependency resolving.
+1. When done, go to `Assets > External Dependency Manager > Android Resolver`, and click `Force Resolve` to start the automatic dependency resolving.
 
 # Configuration
 
@@ -132,11 +101,6 @@ You must provide some modifications for `PostBuildProcessor`. There is a service
 Open `Assets/Playwire/Editor/PostBuildProcessorAndroid.cs` and `Assets/Playwire/Editor/PostBuildProcessoriOS.cs` replace `gamAppId` values with your personal identifiers. These identifiers have to be emailed by your Playwire Account Manager.
 
 This step is mandatory to avoid runtime issues.
-# Migrating from the Total Playwire Unity SDK to the COPPA Playwire Unity SDK and vice versa
-
-1. If you haven't made it yet, replace your `Playwire Unity SDK` package with another version package. See the [Installation](#installation) section to import a new package.
-2. See the [Configuration](#configuration) section to adjust project's configuration.
-
 # Usage
 
 ## CMP
