@@ -1,7 +1,7 @@
 <H1 align="center">Playwire Unity SDK</H1>
 
 <p align="center">
-    <a><img alt="Version" src="https://img.shields.io/badge/version-12.0.0-blue"></a>
+    <a><img alt="Version" src="https://img.shields.io/badge/version-12.1.0-blue"></a>
 </p>
 
 ---
