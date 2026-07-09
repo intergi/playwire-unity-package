@@ -262,7 +262,7 @@ void OnBannerLoadedEvent(PlaywireSDKEventArgs args)
     // ...
 }
 
-void OnBannerFailedToLoadEvent(PlaywireSDKEventArgs args) 
+void OnBannerFailedToLoadEvent(PlaywireSDKErrorEventArgs args)
 {
     // ...
 }
@@ -277,7 +277,7 @@ See the list below for banner-related callbacks.
         public static event Action<PlaywireSDKEventArgs> OnLoadedEvent
 
         /// It is fired when the banner ad failed to load content.
-        public static event Action<PlaywireSDKEventArgs> OnFailedToLoadEvent
+        public static event Action<PlaywireSDKErrorEventArgs> OnFailedToLoadEvent
 
         /// It is fired when the banner ad presented content.
         public static event Action<PlaywireSDKEventArgs> OnOpenedEvent
@@ -341,7 +341,7 @@ void OnInterstitialLoadedEvent(PlaywireSDKEventArgs args)
     // ...
 }
 
-void OnInterstitialFailedToLoadEvent(PlaywireSDKEventArgs args) 
+void OnInterstitialFailedToLoadEvent(PlaywireSDKErrorEventArgs args)
 {
     // ...
 }
@@ -356,13 +356,13 @@ See the list below for interstitial-related callbacks.
         public static event Action<PlaywireSDKEventArgs> OnLoadedEvent
 
         /// It is fired when the interstitial ad failed to load full screen content.
-        public static event Action<PlaywireSDKEventArgs> OnFailedToLoadEvent
+        public static event Action<PlaywireSDKErrorEventArgs> OnFailedToLoadEvent
 
         /// It is fired when the interstitial ad presented full screen content.
         public static event Action<PlaywireSDKEventArgs> OnOpenedEvent
 
         /// It is fired when the interstitial ad failed to present full screen content.
-        public static event Action<PlaywireSDKEventArgs> OnFailedToOpenEvent
+        public static event Action<PlaywireSDKErrorEventArgs> OnFailedToOpenEvent
 
         /// It is fired when an interstitial ad dismissed full screen content and the user goes back to the application screen.
         public static event Action<PlaywireSDKEventArgs> OnClosedEvent
@@ -423,7 +423,7 @@ void OnRewardedLoadedEvent(PlaywireSDKEventArgs args)
     PlaywireSDK.ShowRewarded(args.AdUnitId);
 }
 
-void OnRewardedFailedToLoadEvent(PlaywireSDKEventArgs args) 
+void OnRewardedFailedToLoadEvent(PlaywireSDKErrorEventArgs args)
 {
     // ...
 }
@@ -444,13 +444,13 @@ See the list below for rewarded-related callbacks.
         public static event Action<PlaywireSDKEventArgs> OnLoadedEvent
 
         /// It is fired when the rewarded ad failed to load full screen content.
-        public static event Action<PlaywireSDKEventArgs> OnFailedToLoadEvent
+        public static event Action<PlaywireSDKErrorEventArgs> OnFailedToLoadEvent
 
         /// It is fired when the rewarded ad presented full screen content.
         public static event Action<PlaywireSDKEventArgs> OnOpenedEvent
 
         /// It is fired when the rewarded ad failed to present full screen content.
-        public static event Action<PlaywireSDKEventArgs> OnFailedToOpenEvent
+        public static event Action<PlaywireSDKErrorEventArgs> OnFailedToOpenEvent
 
         /// It is fired when an rewarded ad dismissed full screen content and the user goes back to the application screen.
         public static event Action<PlaywireSDKEventArgs> OnClosedEvent
@@ -543,7 +543,7 @@ void OnAppOpenAdLoadedEvent(PlaywireSDKEventArgs args)
     // ...
 }
 
-void OnAppOpenAdFailedToLoadEvent(PlaywireSDKEventArgs args) 
+void OnAppOpenAdFailedToLoadEvent(PlaywireSDKErrorEventArgs args)
 {
     // ...
 }
@@ -558,13 +558,13 @@ See the list below for 'app open ad'-related callbacks.
         public static event Action<PlaywireSDKEventArgs> OnLoadedEvent
 
         /// It is fired when the app open ad failed to load full screen content.
-        public static event Action<PlaywireSDKEventArgs> OnFailedToLoadEvent
+        public static event Action<PlaywireSDKErrorEventArgs> OnFailedToLoadEvent
 
         /// It is fired when the app open ad presented full screen content.
         public static event Action<PlaywireSDKEventArgs> OnOpenedEvent
 
         /// It is fired when the app open ad failed to present full screen content.
-        public static event Action<PlaywireSDKEventArgs> OnFailedToOpenEvent
+        public static event Action<PlaywireSDKErrorEventArgs> OnFailedToOpenEvent
 
         /// It is fired when an app open ad dismissed full screen content and the user goes to the application.
         public static event Action<PlaywireSDKEventArgs> OnClosedEvent
@@ -674,5 +674,5 @@ The custom targeting can be set at several levels:
 To start monitoring events inside the `Playwire Unity SDK` use logger to log events to the IDE console. The logs can contain information about event's name, ad unit parameters, ad server response, etc.
 
 ```csharp
-PlaywireSDK.StartConsoleLogger();
+PlaywireSDK.SetLogLevel(PlaywireSDKBase.LogLevel.Info);
 ```
