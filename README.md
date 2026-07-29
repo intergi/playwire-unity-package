@@ -1,7 +1,7 @@
 <H1 align="center">Playwire Unity SDK</H1>
 
 <p align="center">
-    <a><img alt="Version" src="https://img.shields.io/badge/version-12.2.0-blue"></a>
+    <a href="https://github.com/intergi/playwire-unity-package/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/intergi/playwire-unity-package?label=version"></a>
 </p>
 
 ---
